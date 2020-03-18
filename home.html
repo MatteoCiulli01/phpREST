@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Esempio ajax</title>
+
+        <script>
+            function get()
+            {
+            //preparo la richiesta ajax
+            var xhr = new XMLHttpRequest();
+            //sincorna
+            xhr.open("GET", 'http://localhost:84/phprest/api.php', false);
+            //invio la richista ajax
+            xhr.send();
+            document.getElementById('risposta').innerHTML = xhr.response;
+            }
+            function getId(id)
+            {
+            //preparo la richiesta ajax
+            var xhr = new XMLHttpRequest();
+            //sincorna
+            xhr.open("GET",'http://localhost:84/phprest/api.php?id='+id, false);
+            //invio la richista ajax
+            xhr.send();
+            document.getElementById('rispostaId').innerHTML = xhr.response;
+            }
+
+            function Delete(id)
+            {
+            //preparo la richiesta ajax
+            var xhr = new XMLHttpRequest();
+            //sincorna
+            xhr.open("DELETE",'http://localhost:84/phprest/api.php?id='+id, false);
+            //invio la richista ajax
+            xhr.send();
+            document.getElementById('deleteId').innerHTML = xhr.response;
+            }
+
+
+            function post()
+            {
+            var xhr = new XMLHttpRequest();
+            var name = document.getElementById('name').value;
+            var surname = document.getElementById('surname').value;
+            var SC = document.getElementById('SC').value;
+            var TC = document.getElementById('TC').value;
+            //asincrona
+            xhr.open("POST",'http://localhost:84/phprest/api.php?name='+name+'&surname='+surname+'&SC='+SC+'&TC='+TC, true);
+            //configuro la callback di risposta ok
+            xhr.onload = function(message) {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('insert').innerHTML = xhr.response;
+            };
+            //configuro la callback di errore
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
+            //invio la richista ajax
+            xhr.send();
+            }
+        </script>
+        
+    </head>
+    <body>
+        <h1>Esempio pagina con richiesta ajax</h1>
+        <p>Risposta:</p>
+        <div>
+        <button type="button"  onclick="get()">Get</button>
+        <p id="risposta"></p>
+
+        <input type="number" name="id" id="id">
+        <button onclick="getId(document.getElementById('id').value)">GetId</button>
+        <p id="rispostaId"></p>
+
+        <input type="number" name="idDelete" id="idDelete">
+        <button onclick="Delete(document.getElementById('idDelete').value)">GetIdForDelete</button>
+        <p id="deleteId"></p>
+
+        <input type="text" name="name" id="name">Name</br>
+        <input type="text" name="surname" id="surname">Surname</br>
+        <input type="text" name="SC" id="SC">SidiCode</br>
+        <input type="text" name="TC" id="TC">TaxCode</br>
+        <button onclick="post()">Post</button>
+        <p id="insert"></p>
+
+        </div>
+    </body>
+</html>
