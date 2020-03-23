@@ -22,18 +22,11 @@ switch($requestMethod) {
 		break;
     
     case 'POST':
-        $name = $_GET["name"];
-        $surname = $_GET["surname"];
-        $SC = $_GET["SC"];
-        $TC = $_GET["TC"];
-        $student->_name = $name;
-        $student->_surname = $surname;
-        $student->_sidiCode = $SC;
-        $student->_taxCode = $TC;
-        echo $name;
-        echo  $surname;
-        echo $SC;
-        echo $TC;
+      $obj=json_decode(file_get_contents("php://input"),true);
+        $student->_name = $obj["name"];
+        $student->_surname = $obj["surname"];
+        $student->_sidiCode = $obj["SC"];
+        $student->_taxCode = $obj["TC"];
         $data = $student->insert();
         if(!empty($data)) {
             $js_encode = json_encode(array('status'=>TRUE, 'studentInfo'=>$data), true);
@@ -55,11 +48,28 @@ switch($requestMethod) {
         header('Content-Type: application/json');
 		echo $js_encode;
         break;
-    case 'PATCH':
-        //TODO patch json_decode
-        break;
-    case 'PUT':
-        //TODO put json_decode
+    case ('PATCH' || 'PUT'):
+      $obj=json_decode(file_get_contents("php://input"),true);
+        $student->_id = $obj["id"];
+        $student->_name = $obj["name"];
+        $student->_surname = $obj["surname"];
+        $student->_sidiCode = $obj["SC"];
+        $student->_taxCode = $obj["TC"];
+        if($requestMethod == 'PATCH')
+        {
+          $data = $student->patch();
+        }
+        else
+        {
+          $data = $student->put();
+        }
+          
+        
+        if(!empty($data)) {
+            $js_encode = json_encode(array('status'=>TRUE, 'studentInfo'=>$data), true);
+          } else {
+            $js_encode = json_encode(array('status'=>FALSE, 'message'=>'There is no record yet.'), true);               // da unire per ottimizzazione
+          }
         break;
     default:
 	    header("HTTP/1.0 405 Method Not Allowed");

@@ -9,20 +9,33 @@
             //preparo la richiesta ajax
             var xhr = new XMLHttpRequest();
             //sincorna
-            xhr.open("GET", 'http://localhost:84/phprest/api.php', false);
+            xhr.open("GET", 'http://localhost:84/phprest/api.php', true);
             //invio la richista ajax
+            xhr.onload = function() {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('risposta').innerHTML = xhr.response;
+            };
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
             xhr.send();
-            document.getElementById('risposta').innerHTML = xhr.response;
             }
+
             function getId(id)
             {
             //preparo la richiesta ajax
             var xhr = new XMLHttpRequest();
             //sincorna
-            xhr.open("GET",'http://localhost:84/phprest/api.php?id='+id, false);
+            xhr.open("GET",'http://localhost:84/phprest/api.php?id='+id, true);
             //invio la richista ajax
-            xhr.send();
-            document.getElementById('rispostaId').innerHTML = xhr.response;
+            xhr.onload = function() {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('rispostaId').innerHTML = xhr.response;
+            };
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
+            xhr.send(); 
             }
 
             function Delete(id)
@@ -45,7 +58,7 @@
             var SC = document.getElementById('SC').value;
             var TC = document.getElementById('TC').value;
             //asincrona
-            xhr.open("POST",'http://localhost:84/phprest/api.php?name='+name+'&surname='+surname+'&SC='+SC+'&TC='+TC, true);
+            xhr.open("POST",'http://localhost:84/phprest/api.php', true);
             //configuro la callback di risposta ok
             xhr.onload = function(message) {
                 //scrivo la risposta nel body della pagina
@@ -56,8 +69,72 @@
                 alert('Errore');
             };
             //invio la richista ajax
-            xhr.send();
+            xhr.send(JSON.stringify({
+            "name":name,
+            "surname":surname,
+            "SC":SC,
+            "TC":TC    
+            }));
             }
+
+            function put()
+            {
+            var xhr = new XMLHttpRequest();
+            var id = document.getElementById('idI').value;
+            var name = document.getElementById('name').value;
+            var surname = document.getElementById('surname').value;
+            var SC = document.getElementById('SC').value;
+            var TC = document.getElementById('TC').value;
+            //asincrona
+            xhr.open("PUT",'http://localhost:84/phprest/api.php', true);
+            //configuro la callback di risposta ok
+            xhr.onload = function(message) {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('insert').innerHTML = xhr.response;
+            };
+            //configuro la callback di errore
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
+            //invio la richista ajax
+            xhr.send(JSON.stringify({
+            "id":id,
+            "name":name,
+            "surname":surname,
+            "SC":SC,
+            "TC":TC    
+            }));
+            }
+
+            function patch()
+            {
+            var xhr = new XMLHttpRequest();
+            var id = document.getElementById('idI').value;
+            var name = document.getElementById('name').value;
+            var surname = document.getElementById('surname').value;
+            var SC = document.getElementById('SC').value;
+            var TC = document.getElementById('TC').value;
+            //asincrona
+            xhr.open("PATCH",'http://localhost:84/phprest/api.php', true);
+            //configuro la callback di risposta ok
+            xhr.onload = function(message) {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('insert').innerHTML = xhr.response;
+            };
+            //configuro la callback di errore
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
+            //invio la richista ajax
+            xhr.send(JSON.stringify({
+            "id":id,
+            "name":name,
+            "surname":surname,
+            "SC":SC,
+            "TC":TC    
+            }));
+            }
+            
         </script>
         
     </head>
@@ -76,11 +153,14 @@
         <button onclick="Delete(document.getElementById('idDelete').value)">GetIdForDelete</button>
         <p id="deleteId"></p>
 
+        <input type="text" name="idI" id="idI">Id(Necessario solo in caso di put)</br>
         <input type="text" name="name" id="name">Name</br>
         <input type="text" name="surname" id="surname">Surname</br>
         <input type="text" name="SC" id="SC">SidiCode</br>
         <input type="text" name="TC" id="TC">TaxCode</br>
         <button onclick="post()">Post</button>
+        <button onclick="put()">Put</button>
+        <button onclick="patch()">Patch</button>
         <p id="insert"></p>
 
         </div>

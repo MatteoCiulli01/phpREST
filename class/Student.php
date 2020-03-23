@@ -89,10 +89,86 @@ class Student
 	}
     // put TODO
     public function put() {
+		try {
+			$sql = 'UPDATE student SET name = :name, surname = :surname, sidiCode = :sidiCode, taxCode = :taxCode WHERE id = :id';
+			echo $sql;
+			$stmt = $this->db->prepare($sql);
+    		$data = [
+				'id' => $this->_id,
+			    'name' => $this->_name,
+			    'surname' => $this->_surname,
+			    'sidiCode' => $this->_sidiCode,
+			    'taxCode' => $this->_taxCode
+			];
+
+		/*	echo "<ul>";
+			foreach($data as $f) {
+				echo "<li>$f</li>";
+			};
+			echo "</ul>";*/ 
+			echo var_dump($data);
+			$stmt->execute($data);
+
+
+		} catch (Exception $e) {
+	
+    		die("Oh noes! There's an error in the query!".$e);
+		}
     }
  
     // patch TODO
     public function patch() {
+		try {
+			$params = "";
+			if(!empty($this->_name))
+			{
+				$params .= "name = :name,"; //$var = $var . "value";
+			}
+			if(!empty($this->_surname))
+			{
+				$params .= "surname = :surname,";
+			}
+			if(!empty($this->_sidiCode))
+			{
+				$params .= "sidiCode = :sidiCode,";
+			}
+			if(!empty($this->_taxCode))
+			{
+				$params .= "taxCode = :taxCode,";
+			}
+			  
+			$params = rtrim($params,","); // The rtrim() function removes whitespace or other predefined characters from the right side of a string
+			$sql = "UPDATE student SET ".$params." WHERE id = :id";
+			echo $sql;
+			$stmt = $this->db->prepare($sql);
+
+			$data = [
+				'id' => $this->_id
+			];
+			if(!empty($this->_name))
+			{
+				$data += ['name'=> $this->_name];
+			}
+			if(!empty($this->_surname))
+			{
+				$data += ['surname'=> $this->_surname] ;
+			}
+			if(!empty($this->_sidiCode))
+			{
+				$data += ['sidiCode' =>$this->_sidiCode] ;
+			}
+			if(!empty($this->_taxCode))
+			{
+				$data += ['taxCode' => $this->_taxCode];
+			}
+			echo var_dump($data);
+
+			$stmt->execute($data);
+ 
+		} catch (Exception $e) {
+	
+    		die("Oh noes! There's an error in the query!".$e);
+		}
     }
  
 }
