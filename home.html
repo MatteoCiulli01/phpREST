@@ -8,7 +8,7 @@
             {
             //preparo la richiesta ajax
             var xhr = new XMLHttpRequest();
-            //sincorna
+
             xhr.open("GET", 'http://localhost:84/phprest/api.php', true);
             //invio la richista ajax
             xhr.onload = function() {
@@ -25,7 +25,7 @@
             {
             //preparo la richiesta ajax
             var xhr = new XMLHttpRequest();
-            //sincorna
+
             xhr.open("GET",'http://localhost:84/phprest/api.php?id='+id, true);
             //invio la richista ajax
             xhr.onload = function() {
@@ -43,10 +43,16 @@
             //preparo la richiesta ajax
             var xhr = new XMLHttpRequest();
             //sincorna
-            xhr.open("DELETE",'http://localhost:84/phprest/api.php?id='+id, false);
+            xhr.open("DELETE",'http://localhost:84/phprest/api.php?id='+id, true);
+            xhr.onload = function() {
+                //scrivo la risposta nel body della pagina
+                document.getElementById('rispostaId').innerHTML = xhr.response;
+            };
             //invio la richista ajax
+            xhr.onerror = function(error) { 
+                alert('Errore');
+            };
             xhr.send();
-            document.getElementById('deleteId').innerHTML = xhr.response;
             }
 
 
