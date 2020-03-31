@@ -1,24 +1,73 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Esempio ajax</title>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-        <script>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<!-- Open Graph data -->
+  <meta property="og:title" content="Fresh Bootstrap Table by Creative Tim" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://wenzhixin.github.io/fresh-bootstrap-table/full-screen-table.html" />
+  <meta property="og:image" content="http://s3.amazonaws.com/creativetim_bucket/products/31/original/opt_fbt_thumbnail.jpg"/>
+  <meta property="og:description" content="Probably the most beautiful and complex bootstrap table you've ever seen on the internet, this bootstrap table is one of the essential plugins you will need." />
+  <meta property="og:site_name" content="Creative Tim" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="assets/css/fresh-bootstrap-table.css" rel="stylesheet" />
+  <link href="assets/css/demo.css" rel="stylesheet" />
+
+  <!--   Fonts and icons   -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300" rel="stylesheet" type="text/css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-table/dist/bootstrap-table.js"></script>
+
+
+
+</head>
+<body onload="get()">
+    <p style="color:black;font-size:300%;font-family:roboto;">Lista studenti</p>
+    <input type="number" name="id" id="id">
+    <button onclick="getId(document.getElementById('id').value)">GetId</button>
+  <div style="color:black;"class="fresh-table full-color-orange full-screen-table" id="risposta">
+
+ </div>
+
+
+<script>
+
+  function get()
+            {
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("GET", 'http://localhost:84/phprest/api.php', true);
+                //invio la richista ajax
+                xhr.onload = function() {
+              //scrivo la risposta nel body della pagina
+                document.getElementById('risposta').innerHTML = xhr.response;
+                };
+                xhr.onerror = function(error) { 
+                    alert('Errore');
+                };
+                xhr.send();
+            }
             function get()
             {
-            //preparo la richiesta ajax
-            var xhr = new XMLHttpRequest();
+                var xhr = new XMLHttpRequest();
 
-            xhr.open("GET", 'http://localhost:84/phprest/api.php', true);
-            //invio la richista ajax
-            xhr.onload = function() {
-                //scrivo la risposta nel body della pagina
+                xhr.open("GET", 'http://localhost:84/phprest/api.php', true);
+                //invio la richista ajax
+                xhr.onload = function() {
+              //scrivo la risposta nel body della pagina
                 document.getElementById('risposta').innerHTML = xhr.response;
-            };
-            xhr.onerror = function(error) { 
-                alert('Errore');
-            };
-            xhr.send();
+                };
+                xhr.onerror = function(error) { 
+                    alert('Errore');
+                };
+                xhr.send();
             }
 
             function getId(id)
@@ -28,9 +77,21 @@
 
             xhr.open("GET",'http://localhost:84/phprest/api.php?id='+id, true);
             //invio la richista ajax
-            xhr.onload = function() {
-                //scrivo la risposta nel body della pagina
-                document.getElementById('rispostaId').innerHTML = xhr.response;
+            xhr.onreadystatechange = function() 
+            {
+                var str="[";
+                var i;
+                for(i=29;i<xhr.response.length-2;i++)
+                {
+                    str += xhr.response[i];
+                }
+                str += "]";
+                var parsed = JSON.parse(str); 
+                var user = parsed[0];       
+                document.getElementById('name').innerHTML = user.name;
+                document.getElementById('surname').innerHTML = user.surname;
+                document.getElementById('SC').innerHTML = user.sidiCode;
+                document.getElementById('TC').innerHTML = user.taxCode;
             };
             xhr.onerror = function(error) { 
                 alert('Errore');
@@ -140,35 +201,19 @@
             "TC":TC    
             }));
             }
-            
-        </script>
-        
-    </head>
-    <body>
-        <h1>Esempio pagina con richiesta ajax</h1>
-        <p>Risposta:</p>
-        <div>
-        <button type="button"  onclick="get()">Get</button>
-        <p id="risposta"></p>
+</script>
 
-        <input type="number" name="id" id="id">
-        <button onclick="getId(document.getElementById('id').value)">GetId</button>
-        <p id="rispostaId"></p>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga')
 
-        <input type="number" name="idDelete" id="idDelete">
-        <button onclick="Delete(document.getElementById('idDelete').value)">GetIdForDelete</button>
-        <p id="deleteId"></p>
+  ga('create', 'UA-46172202-1', 'auto')
+  ga('send', 'pageview')
 
-        <input type="text" name="idI" id="idI">Id(Necessario solo in caso di put)</br>
-        <input type="text" name="name" id="name">Name</br>
-        <input type="text" name="surname" id="surname">Surname</br>
-        <input type="text" name="SC" id="SC">SidiCode</br>
-        <input type="text" name="TC" id="TC">TaxCode</br>
-        <button onclick="post()">Post</button>
-        <button onclick="put()">Put</button>
-        <button onclick="patch()">Patch</button>
-        <p id="insert"></p>
+</script>
 
-        </div>
-    </body>
+</body>
+
 </html>

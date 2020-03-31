@@ -17,7 +17,6 @@ switch($requestMethod) {
         } else {
           $js_encode = json_encode(array('status'=>FALSE, 'message'=>'There is no record yet.'), true);
         }
-        header('Content-Type: application/json');
 		echo $js_encode;
 		break;
     
