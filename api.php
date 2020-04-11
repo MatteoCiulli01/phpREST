@@ -7,7 +7,7 @@ switch($requestMethod) {
 		$id = '';	
 		if($_GET['id']) {
             $id = $_GET['id'];
-			$student->_id = $id;
+      $student->_id = $id;
 			$data = $student->one();
 		} else {
 			$data = $student->list();

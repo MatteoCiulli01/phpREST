@@ -83,13 +83,12 @@ class Student
 			echo "</thead>";
 			for ($i = 0; $i <= count($result)-1; $i++) {
 			echo "<tr>";
-			echo "<td>" .$result[$i]["id"]. "</td>";
 			echo "<td>" .$result[$i]["name"]. "</td>";
 			echo "<td>" .$result[$i]["surname"]. "</td>";
 			echo "<td>" .$result[$i]["sidiCode"]. "</td>";
 			echo "<td>" .$result[$i]["taxCode"]. "</td>";
-			echo "<td><button class='btn'><i class='fa fa-trash'> Elimina</i> </button></td>";
-			echo "<td><button class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
+			echo "<td><button onclick='Delete(".$result[$i]['id'].")' class='btn'><i class='fa fa-trash'> Elimina</i> </button></td>";
+			echo "<td><button id='MOD' onclick=location.href='Modifica.html' class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
 			echo "<td><button class='btn'><i class='fa fa-pencil'> Sovrascrivi</i></button></td>";
 			echo "</tr>";
 			}
@@ -108,8 +107,26 @@ class Student
 		    	'id' => $this->_id
 			];
 		    $stmt->execute($data);
-		    $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $result;
+			$result = $stmt->fetch(\PDO::FETCH_ASSOC);
+			echo "<table id='fresh-table' class='table'>";
+			echo "<thead>";
+			echo "<script src='Funzioni.js'></script>";
+			echo "<th  data-field='name' data-sortable='true'>Name</th>";
+			echo "<th  data-field='name' data-sortable='true'>Surname</th>";
+			echo "<th  data-field='name' data-sortable='true'>sidiCode</th>";
+			echo "<th  data-field='name' data-sortable='true'>taxCode</th>";
+			echo "<th  data-field='name' data-sortable='true'>edit</th>";
+			echo "</thead>";
+			echo "<tr>";
+			echo "<td>" .$result["name"]. "</td>";
+			echo "<td>" .$result["surname"]. "</td>";
+			echo "<td>" .$result["sidiCode"]. "</td>";
+			echo "<td>" .$result["taxCode"]. "</td>";
+			echo "<td><button onclick='Delete(".$result['id'].")' class='btn'><i class='fa fa-trash'> Elimina</i> </button></td>";
+			echo "<td><button class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
+			echo "<td><button class='btn'><i class='fa fa-pencil'> Sovrascrivi</i></button></td>";
+			echo "</tr>";
+			echo "</table>";
 		} catch (Exception $e) {
 		    die("Oh noes! There's an error in the query!");
 		}
@@ -142,12 +159,6 @@ class Student
 			    'sidiCode' => $this->_sidiCode,
 			    'taxCode' => $this->_taxCode
 			];
-
-		/*	echo "<ul>";
-			foreach($data as $f) {
-				echo "<li>$f</li>";
-			};
-			echo "</ul>";*/ 
 			echo var_dump($data);
 			$stmt->execute($data);
 
@@ -217,7 +228,12 @@ class Student
 ?>
 <body>
 <script>
-	  $(function () {
+	function modifica()
+	{
+
+    }
+	
+	$(function () {
     $table.bootstrapTable({
       classes: 'table table-hover table-striped',
       toolbar: '.toolbar',
