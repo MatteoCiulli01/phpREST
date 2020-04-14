@@ -5,22 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="Funzioni.js"></script>
 <style>
 .btn {
   background-color: DodgerBlue;
-  border: none;
+  border-color: white;
   color: white;
   padding: 12px 16px;
   font-size: 16px;
   cursor: pointer;
 }
-
-/* Darker background on mouse-over */
-.btn:hover {
-  background-color: RoyalBlue;
+#myDIV {
+  width: 30%;
+  position:fixed;
+  right:0;
+  bottom:0;
+  margin-bottom:-50px;	
+  z-index:1024;
+  border: black 1px solid;
+}
+#myADD {
+  width: 30%;
+  top:0;
+  margin: auto;
 }
 </style>
+<script>
+	
+	$(function () {
+    $table.bootstrapTable({
+      classes: 'table table-hover table-striped',
+      toolbar: '.toolbar',
+      
+      showColumns: true,
+      pagination: true,
+      striped: true,
+      sortable: true,
+      height: $(window).height(),
+      pageSize: 25,
+      pageList: [25, 50, 100],
+
+      formatShowingRows: function (pageFrom, pageTo, totalRows) {
+        return ''
+      },
+      formatRecordsPerPage: function (pageNumber) {
+        return pageNumber + ' rows visible'
+      }
+    })
+
+
+    $(window).resize(function () {
+      $table.bootstrapTable('resetView', {
+        height: $(window).height()
+      })
+    })
+  })
+</script>
 </head>
+<body>
 <?php
 /**
  * @package Student class
@@ -30,6 +72,7 @@
  */
  
 include("DBConnection.php");
+
 class Student 
 {
     protected $db;
@@ -38,7 +81,7 @@ class Student
     public $_surname;
     public $_sidiCode;
     public $_taxCode;
- 
+
     public function __construct() {
         $this->db = new DBConnection();
         $this->db = $this->db->returnConnection();
@@ -82,14 +125,15 @@ class Student
 			echo "<th  data-field='name' data-sortable='true'>edit</th>";
 			echo "</thead>";
 			for ($i = 0; $i <= count($result)-1; $i++) {
+			$idI = $result[$i]['id'];
 			echo "<tr>";
 			echo "<td>" .$result[$i]["name"]. "</td>";
 			echo "<td>" .$result[$i]["surname"]. "</td>";
 			echo "<td>" .$result[$i]["sidiCode"]. "</td>";
 			echo "<td>" .$result[$i]["taxCode"]. "</td>";
 			echo "<td><button onclick='Delete(".$result[$i]['id'].")' class='btn'><i class='fa fa-trash'> Elimina</i> </button></td>";
-			echo "<td><button id='MOD' onclick=location.href='Modifica.html' class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
-			echo "<td><button class='btn'><i class='fa fa-pencil'> Sovrascrivi</i></button></td>";
+			echo "<td><button onclick='ModDiv(".$result[$i]['id'].")' class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
+			echo "<td><button class='btn'ppp><i class='fa fa-pencil'> Sovrascrivi</i></button></td>";
 			echo "</tr>";
 			}
 			echo "</table>";
@@ -123,7 +167,7 @@ class Student
 			echo "<td>" .$result["sidiCode"]. "</td>";
 			echo "<td>" .$result["taxCode"]. "</td>";
 			echo "<td><button onclick='Delete(".$result['id'].")' class='btn'><i class='fa fa-trash'> Elimina</i> </button></td>";
-			echo "<td><button class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
+			echo "<td><button onclick='ModDiv(".$result['id'].")' class='btn'><i class='fa fa-pencil'> Modifica</i></button></td>";
 			echo "<td><button class='btn'><i class='fa fa-pencil'> Sovrascrivi</i></button></td>";
 			echo "</tr>";
 			echo "</table>";
@@ -225,42 +269,42 @@ class Student
     }
  
 }
+
 ?>
-<body>
-<script>
-	function modifica()
-	{
+<div id="myDIV" style="display:none">   
+        <div style="color:black;"class="fresh-table full-color-orange full-screen-table" >
+            <form>
+			<p>Studente numero : </p>
+			<p id="id"></p>
+			<label>Name</label>
+            <input type="text" id="name" class="form-control" placeholder="insert NAME"   required>
+            <label>Surname</label><br>
+            <input type="text" id="surname" class="form-control" placeholder="insert SURNAME"	required>
+            <label>sidiCode</label>  
+            <input type="text" id="SC" class="form-control" placeholder="insert SIDICODE"	required>
+             <label >TaxCode</label>
+           <input type="text" id="TC" class="form-control" placeholder="insert TAXCODE"	required>
+           <button class="btn" onclick="put(document.getElementById('id').innerHTML)" >Conferma</button>
+           <button type ="reset" class="btn" name="Annulla">Annulla</button>
+           </form>
+        </div>
+    </div>
 
-    }
-	
-	$(function () {
-    $table.bootstrapTable({
-      classes: 'table table-hover table-striped',
-      toolbar: '.toolbar',
-      
-      showColumns: true,
-      pagination: true,
-      striped: true,
-      sortable: true,
-      height: $(window).height(),
-      pageSize: 25,
-      pageList: [25, 50, 100],
-
-      formatShowingRows: function (pageFrom, pageTo, totalRows) {
-        return ''
-      },
-      formatRecordsPerPage: function (pageNumber) {
-        return pageNumber + ' rows visible'
-      }
-    })
-
-
-    $(window).resize(function () {
-      $table.bootstrapTable('resetView', {
-        height: $(window).height()
-      })
-    })
-  })
-</script>
+<div id="myADD" style="display:none">   
+    <div style="color:black;"class="fresh-table full-color-orange full-screen-table" >
+    <form>
+		<label>Name</label>
+        <input type="text" id="nameP" class="form-control" placeholder="insert NAME"   required>
+        <label>Surname</label><br>
+        <input type="text" id="surnameP" class="form-control" placeholder="insert SURNAME"	required>
+        <label>sidiCode</label>  
+        <input type="text" id="SCP" class="form-control" placeholder="insert SIDICODE"	required>
+    	<label >TaxCode</label>
+        <input type="text" id="TCP" class="form-control" placeholder="insert TAXCODE"	required>
+        <button class="btn" onclick="post()" >Conferma</button>
+        <button type ="reset" class="btn" name="Annulla">Annulla</button>
+    </form>
+    </div>
+</div>	
 </body>
 </html>

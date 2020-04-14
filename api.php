@@ -5,7 +5,7 @@ $student = new Student();
 switch($requestMethod) {
 	case 'GET':
 		$id = '';	
-		if($_GET['id']) {
+		if(isset($_GET['id'])) {
             $id = $_GET['id'];
       $student->_id = $id;
 			$data = $student->one();
@@ -22,10 +22,10 @@ switch($requestMethod) {
     
     case 'POST':
       $obj=json_decode(file_get_contents("php://input"),true);
-        $student->_name = $obj["name"];
-        $student->_surname = $obj["surname"];
-        $student->_sidiCode = $obj["SC"];
-        $student->_taxCode = $obj["TC"];
+        $student->_name = $obj["nameP"];
+        $student->_surname = $obj["surnameP"];
+        $student->_sidiCode = $obj["SCP"];
+        $student->_taxCode = $obj["TCP"];
         $data = $student->insert();
         if(!empty($data)) {
             $js_encode = json_encode(array('status'=>TRUE, 'studentInfo'=>$data), true);

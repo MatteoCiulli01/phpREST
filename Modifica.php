@@ -35,10 +35,17 @@
       background-color: RoyalBlue;
     }
     </style>
+
+   <?php include("class/Student.php");
+   session_start();
+   ?>
 </head>
 <body>
-    <div>
-        <p style="color:black;font-size:300%;font-family:roboto;">Modifica studente</p>
+<?php 
+   $_SESSION["id"] = $_GET["idMod"];
+   ?>
+    <div>   
+        <p style="color:black;font-size:300%;font-family:roboto;">Modifica studente <?php echo $_GET["idMod"];?></p>
         <div style="color:black;"class="fresh-table full-color-orange full-screen-table" >
             <form>
             <label>Name</label>
@@ -49,16 +56,43 @@
             <input type="text" id="SC" class="form-control" placeholder="insert SIDICODE"	required>
              <label >TaxCode</label>
            <input type="text" id="TC" class="form-control" placeholder="insert TAXCODE"	required>
-
-
-       <button onclick="put()" class="btn" name="Conferma" >Conferma</button>
-       <button type ="reset" class="btn" name="Annulla">Annulla</button>
-   </form>
+           <button class="btn" onclick="put()">Conferma</button>
+           <button type ="reset" class="btn" name="Annulla">Annulla</button>
+           </form>
         </div>
     </div>
 
 
 <script>
+  
+function put()
+{
+var xhr = new XMLHttpRequest();
+var id = "<?php echo $_SESSION["id"]?>";
+var name = document.getElementById('name').value;
+var surname = document.getElementById('surname').value;
+var SC = document.getElementById('SC').value;
+var TC = document.getElementById('TC').value;
+//asincrona
+xhr.open("PUT",'http://localhost:84/phprest/api.php', true);
+//configuro la callback di risposta ok
+xhr.onload = function(message) {
+    //scrivo la risposta nel body della pagina
+    location.href="home.html";
+};
+//configuro la callback di errore
+xhr.onerror = function(error) { 
+    alert('Errore');
+};
+//invio la richista ajax
+xhr.send(JSON.stringify({
+"id":id,
+"name":name,
+"surname":surname,
+"SC":SC,
+"TC":TC    
+}));
+}
     var input = document.getElementById("myInput");
     input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {

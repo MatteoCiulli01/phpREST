@@ -42,8 +42,9 @@
 </head>
 <body onload="get()" >
     <p style="color:black;font-size:300%;font-family:roboto;">Lista studenti</p>
-    <div style="color:black;"class="fresh-table full-color-orange full-screen-table" >
+    <div style="color:black;"class="fresh-table full-color-orange full-screen-table" id="divPrincipale" >
     <nav class="navbar">
+        <button onclick="AddDiv()" type="button" class="btn btn-primary">Aggiungi studente +</button>
         <div class="bottomright">
             <form class="form-inline my-2 my-lg-0">
                 <input type="text" id="myInput" action="getId(document.getElementById('id').value)" class="form-control mr-sm-2" placeholder="Inserire id per la ricerca">
